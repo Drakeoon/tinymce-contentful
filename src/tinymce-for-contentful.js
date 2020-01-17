@@ -49,12 +49,12 @@ window.contentfulExtension.init(function(api) {
 
             const client = contentfulManagement.createClient({
               accessToken: tweak(
-                api.parameters.instance.contentfulManagementApiKey
+                api.parameters.installation.contentfulManagementApiKey
               )
             });
 
             client
-              .getSpace(tweak(api.parameters.instance.spaceId))
+              .getSpace(tweak(api.parameters.installation.spaceId))
               .then(space =>
                 space.createAssetFromFiles({
                   fields: {
