@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8" />
     <title>TinyMCE</title>
     <script src="https://unpkg.com/contentful-ui-extensions-sdk@3"></script>
     <script src="https://unpkg.com/lodash@4.17.11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/contentful-management@5.12.0/dist/contentful-management.browser.js"></script>
 
     <style type="text/css">
       .tox-dialog {
@@ -18,8 +19,24 @@
         overflow: hidden;
       }
       div#editor {
-        width:100%;
-        min-height:250px;
+        width: 100%;
+        min-height: 250px;
+      }
+
+      .tox-dialog .tox-dialog__body {
+        position: relative;
+      }
+
+      .tox-dialog .tox-dialog__body .tinymce-loading {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     </style>
   </head>

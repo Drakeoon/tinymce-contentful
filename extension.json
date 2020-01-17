@@ -46,6 +46,22 @@
         "description": "Specify the menus to display here. To use the default menu bar, clear this field. To hide the menu, enter the value 'false'. See https://www.tiny.cloud/docs/configure/editor-appearance/#menubar",
         "required": false,
         "default": "edit view insert format"
+      },
+      {
+        "id": "contentfulManagementApiKey",
+        "type": "Symbol",
+        "name": "Contentful Management Api Key",
+        "description": "Paste your Management Api Key here",
+        "required": true,
+        "default": ""
+      },
+      {
+        "id": "spaceId",
+        "type": "Symbol",
+        "name": "Contentful Space Id",
+        "description": "Paste your Space Id here",
+        "required": true,
+        "default": ""
       }
     ]
   }
