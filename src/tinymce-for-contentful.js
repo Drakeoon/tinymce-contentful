@@ -22,7 +22,7 @@ window.contentfulExtension.init(function(api) {
       toolbar: tb,
       menubar: mb,
       max_height: 800,
-      min_height: 300,
+      min_height: 600,
       autoresize_bottom_margin: 15,
       resize: false,
       image_caption: true,
