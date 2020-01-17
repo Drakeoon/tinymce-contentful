@@ -21,7 +21,7 @@ window.contentfulExtension.init(function(api) {
       plugins: api.parameters.instance.plugins,
       toolbar: tb,
       menubar: mb,
-      max_height: 500,
+      max_height: 800,
       min_height: 300,
       autoresize_bottom_margin: 15,
       resize: false,
