@@ -1,7 +1,7 @@
 {
   "id": "TinyMCE",
   "name": "TinyMCE",
-  "src": "https://contentful.tiny.cloud/",
+  "src": "https://contentful-tinymce.s3.eu-central-1.amazonaws.com/",
   "fieldTypes": ["Text"],
   "parameters": {
     "installation": [
