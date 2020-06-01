@@ -1,5 +1,67 @@
-window.contentfulExtension.init(function(api) {
+window.contentfulExtension.init(function (api) {
   function tinymceForContentful(api) {
+    tinymce.PluginManager.add("hubspot", function (editor, url) {
+      var openDialog = function () {
+        return editor.windowManager.open({
+          title: "Paste Hub Spot script",
+          body: {
+            type: "panel",
+            items: [
+              {
+                type: "textarea",
+                name: "script",
+                label: "Script",
+              },
+            ],
+          },
+          buttons: [
+            {
+              type: "cancel",
+              text: "Close",
+            },
+            {
+              type: "submit",
+              text: "Insert",
+              primary: true,
+            },
+          ],
+          onSubmit: function (api) {
+            var data = api.getData();
+            // Insert content when the window form is submitted
+            editor.insertContent(data.script);
+            api.close();
+          },
+        });
+      };
+
+      // Add a button that opens a window
+      editor.ui.registry.addButton("hubspot", {
+        text: "Insert inline HubSpot script",
+        onAction: function () {
+          // Open window
+          openDialog();
+        },
+      });
+
+      // Adds a menu item, which can then be included in any menu via the menu/menubar configuration
+      editor.ui.registry.addMenuItem("hubspot", {
+        text: "HubSpot",
+        onAction: function () {
+          // Open window
+          openDialog();
+        },
+      });
+
+      return {
+        getMetadata: function () {
+          return {
+            name: "HubSpot",
+            url: "http://exampleplugindocsurl.com",
+          };
+        },
+      };
+    });
+
     api.window.startAutoResizer();
 
     function tweak(param) {
@@ -26,19 +88,20 @@ window.contentfulExtension.init(function(api) {
       autoresize_bottom_margin: 15,
       resize: false,
       image_caption: true,
+      extended_valid_elements: "script[src|async|defer|type|charset]",
       file_picker_types: "image",
-      file_picker_callback: function(cb, value, meta) {
+      file_picker_callback: function (cb, value, meta) {
         var input = document.createElement("input");
         input.setAttribute("type", "file");
         input.setAttribute("accept", "image/*");
 
-        input.onchange = function() {
+        input.onchange = function () {
           var file = this.files[0];
 
           const { name: fileName, type: contentType } = file;
 
           var reader = new FileReader();
-          reader.onload = function() {
+          reader.onload = function () {
             const waitMsg = "Please wait...";
 
             const div = document.createElement("div");
@@ -50,32 +113,32 @@ window.contentfulExtension.init(function(api) {
             const client = contentfulManagement.createClient({
               accessToken: tweak(
                 api.parameters.installation.contentfulManagementApiKey
-              )
+              ),
             });
 
             client
               .getSpace(tweak(api.parameters.installation.spaceId))
-              .then(space =>
+              .then((space) =>
                 space.createAssetFromFiles({
                   fields: {
                     title: {
-                      "en-US": fileName
+                      "en-US": fileName,
                     },
                     description: {
-                      "en-US": fileName
+                      "en-US": fileName,
                     },
                     file: {
                       "en-US": {
                         contentType,
                         fileName,
-                        file
-                      }
-                    }
-                  }
+                        file,
+                      },
+                    },
+                  },
                 })
               )
-              .then(asset => asset.processForAllLocales())
-              .then(asset => {
+              .then((asset) => asset.processForAllLocales())
+              .then((asset) => {
                 const { url } = asset.fields.file["en-US"];
                 const title = asset.fields.title["en-US"];
 
@@ -90,7 +153,7 @@ window.contentfulExtension.init(function(api) {
 
         input.click();
       },
-      init_instance_callback: function(editor) {
+      init_instance_callback: function (editor) {
         var listening = true;
 
         function getEditorContent() {
@@ -112,7 +175,7 @@ window.contentfulExtension.init(function(api) {
 
         setContent(api.field.getValue());
 
-        api.field.onValueChanged(function(x) {
+        api.field.onValueChanged(function (x) {
           if (listening) {
             setContent(x);
           }
@@ -127,10 +190,10 @@ window.contentfulExtension.init(function(api) {
             listening = false;
             api.field
               .setValue(editorContent)
-              .then(function() {
+              .then(function () {
                 listening = true;
               })
-              .catch(function(err) {
+              .catch(function (err) {
                 console.log("Error setting content", err);
                 listening = true;
               });
@@ -139,7 +202,7 @@ window.contentfulExtension.init(function(api) {
 
         var throttled = _.throttle(onEditorChange, 500, { leading: true });
         editor.on("change keyup setcontent blur", throttled);
-      }
+      },
     });
   }
 
@@ -164,7 +227,7 @@ window.contentfulExtension.init(function(api) {
     "/tinymce.min.js?apiKey=" +
     apiKey;
 
-  loadScript(tinymceUrl, function() {
+  loadScript(tinymceUrl, function () {
     tinymceForContentful(api);
   });
 });
