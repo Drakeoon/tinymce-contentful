@@ -37,19 +37,24 @@ window.contentfulExtension.init(function (api) {
       // Add a button that opens a window
       editor.ui.registry.addMenuButton("hubspot", {
         text: "Extra",
-        onAction: function () {
-          // Open window
-          openDialog();
-        },
-      });
+        fetch: function (callback) {
+          var items = [
+            {
+              type: 'menuitem',
+              text: "Insert script (Codepen, Hubspot)",
+              onAction: function () {
+                // Open window
+                openDialog();
+              },
+            },
+            {
+              type: 'menuitem',
+              text: 'Insert code',
+            }
+          ]
 
-      // Adds a menu item, which can then be included in any menu via the menu/menubar configuration
-      editor.ui.registry.addMenuItem("hubspot-script", {
-        text: "Insert HubSpot script",
-        onAction: function () {
-          // Open window
-          openDialog();
-        },
+          callback(items)
+        }
       });
 
       return {
