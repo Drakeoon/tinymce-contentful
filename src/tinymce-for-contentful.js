@@ -35,8 +35,8 @@ window.contentfulExtension.init(function (api) {
       };
 
       // Add a button that opens a window
-      editor.ui.registry.addButton("hubspot", {
-        text: "Insert inline HubSpot script",
+      editor.ui.registry.addMenuButton("hubspot", {
+        text: "Extra",
         onAction: function () {
           // Open window
           openDialog();
@@ -44,8 +44,8 @@ window.contentfulExtension.init(function (api) {
       });
 
       // Adds a menu item, which can then be included in any menu via the menu/menubar configuration
-      editor.ui.registry.addMenuItem("hubspot", {
-        text: "HubSpot",
+      editor.ui.registry.addMenuItem("hubspot-script", {
+        text: "Insert HubSpot script",
         onAction: function () {
           // Open window
           openDialog();
@@ -61,6 +61,24 @@ window.contentfulExtension.init(function (api) {
         },
       };
     });
+
+    editor.ui.registry.addMenuItem("hubspot-codepen", {
+      text: "Paste code snippet",
+      onAction: function () {
+        // Open window
+        openDialog();
+      },
+    });
+
+    return {
+      getMetadata: function () {
+        return {
+          name: "HubSpot",
+          url: "http://exampleplugindocsurl.com",
+        };
+      },
+    };
+  });
 
     api.window.startAutoResizer();
 
