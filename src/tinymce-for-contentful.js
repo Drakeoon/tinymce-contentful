@@ -1,7 +1,7 @@
 window.contentfulExtension.init(function (api) {
   function tinymceForContentful(api) {
     tinymce.PluginManager.add("hubspot", function (editor, url) {
-      var openDialog = function () {
+      var openInsertScriptDialog = function () {
         return editor.windowManager.open({
           title: "Paste Hub Spot script",
           body: {
@@ -34,6 +34,38 @@ window.contentfulExtension.init(function (api) {
         });
       };
 
+      var openPasteSnippetDialog = function () {
+        return editor.windowManager.open({
+          title: "Paste your code snippet here",
+          body: {
+            type: "panel",
+            items: [
+              {
+                type: "textarea",
+                name: "code",
+                label: "Code",
+              },
+            ],
+          },
+          buttons: [
+            {
+              type: "cancel",
+              text: "Close",
+            },
+            {
+              type: "submit",
+              text: "Insert",
+              primary: true,
+            },
+          ],
+          onSubmit: function (api) {
+            var data = api.getData();
+            editor.insertContent(`<pre><code>${data.code}<code></pre>`);
+            api.close();
+          },
+        });
+      };
+
       // Add a button that opens a window
       editor.ui.registry.addMenuButton("hubspot", {
         text: "Extra",
@@ -44,12 +76,15 @@ window.contentfulExtension.init(function (api) {
               text: "Insert script (Codepen, Hubspot)",
               onAction: function () {
                 // Open window
-                openDialog();
+                openInsertScriptDialog();
               },
             },
             {
               type: "menuitem",
               text: "Insert code",
+              onAction: function () {
+                openPasteSnippetDialog();
+              },
             },
           ];
 
