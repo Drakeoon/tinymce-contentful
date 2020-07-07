@@ -40,7 +40,7 @@ window.contentfulExtension.init(function (api) {
         fetch: function (callback) {
           var items = [
             {
-              type: 'menuitem',
+              type: "menuitem",
               text: "Insert script (Codepen, Hubspot)",
               onAction: function () {
                 // Open window
@@ -48,13 +48,13 @@ window.contentfulExtension.init(function (api) {
               },
             },
             {
-              type: 'menuitem',
-              text: 'Insert code',
-            }
-          ]
+              type: "menuitem",
+              text: "Insert code",
+            },
+          ];
 
-          callback(items)
-        }
+          callback(items);
+        },
       });
 
       return {
@@ -66,24 +66,6 @@ window.contentfulExtension.init(function (api) {
         },
       };
     });
-
-    editor.ui.registry.addMenuItem("hubspot-codepen", {
-      text: "Paste code snippet",
-      onAction: function () {
-        // Open window
-        openDialog();
-      },
-    });
-
-    return {
-      getMetadata: function () {
-        return {
-          name: "HubSpot",
-          url: "http://exampleplugindocsurl.com",
-        };
-      },
-    };
-  });
 
     api.window.startAutoResizer();
 
