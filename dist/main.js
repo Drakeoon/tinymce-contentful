@@ -17377,12 +17377,17 @@ const defaultPlugins = [
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _plugins__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./plugins */ "./src/tinymce/plugins.js");
+
+
 
 
 const initTinyMCE = (
   api,
   { toolbar, menubar, plugins, accessToken = "", space }
 ) => {
+  Object(_plugins__WEBPACK_IMPORTED_MODULE_1__["initHubspotPlugin"])();
+
   tinymce.init({
     selector: "#editor",
     plugins: plugins,
@@ -17510,6 +17515,123 @@ const initTinyMCE = (
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (initTinyMCE);
+
+
+/***/ }),
+
+/***/ "./src/tinymce/plugins.js":
+/*!********************************!*\
+  !*** ./src/tinymce/plugins.js ***!
+  \********************************/
+/*! exports provided: initHubspotPlugin */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "initHubspotPlugin", function() { return initHubspotPlugin; });
+const initHubspotPlugin = () => {
+  tinymce.PluginManager.add("hubspot", function (editor, url) {
+    var openInsertScriptDialog = function () {
+      return editor.windowManager.open({
+        title: "Paste Hub Spot script",
+        body: {
+          type: "panel",
+          items: [
+            {
+              type: "textarea",
+              name: "script",
+              label: "Script",
+            },
+          ],
+        },
+        buttons: [
+          {
+            type: "cancel",
+            text: "Close",
+          },
+          {
+            type: "submit",
+            text: "Insert",
+            primary: true,
+          },
+        ],
+        onSubmit: function (api) {
+          var data = api.getData();
+          // Insert content when the window form is submitted
+          editor.insertContent(data.script);
+          api.close();
+        },
+      });
+    };
+
+    var openPasteSnippetDialog = function () {
+      return editor.windowManager.open({
+        title: "Paste your code snippet here",
+        body: {
+          type: "panel",
+          items: [
+            {
+              type: "textarea",
+              name: "code",
+              label: "Code",
+            },
+          ],
+        },
+        buttons: [
+          {
+            type: "cancel",
+            text: "Close",
+          },
+          {
+            type: "submit",
+            text: "Insert",
+            primary: true,
+          },
+        ],
+        onSubmit: function (api) {
+          var data = api.getData();
+          editor.insertContent(`<pre><code>${data.code}<code></pre>`);
+          api.close();
+        },
+      });
+    };
+
+    // Add a button that opens a window
+    editor.ui.registry.addMenuButton("hubspot", {
+      text: "Extra",
+      fetch: function (callback) {
+        var items = [
+          {
+            type: "menuitem",
+            text: "Insert script (Codepen, Hubspot)",
+            onAction: function () {
+              // Open window
+              openInsertScriptDialog();
+            },
+          },
+          {
+            type: "menuitem",
+            text: "Insert code",
+            onAction: function () {
+              openPasteSnippetDialog();
+            },
+          },
+        ];
+
+        callback(items);
+      },
+    });
+
+    return {
+      getMetadata: function () {
+        return {
+          name: "HubSpot",
+          url: "http://exampleplugindocsurl.com",
+        };
+      },
+    };
+  });
+};
 
 
 /***/ })
