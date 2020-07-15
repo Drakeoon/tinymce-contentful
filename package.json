@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "This repository contains the integration of the TinyMCE rich text editor into the  Contentful headless CMS.",
   "scripts": {
-    "start": "node "
+    "start": "npx webpack-dev-server"
   },
   "private": true,
   "repository": {
@@ -18,7 +18,8 @@
   "homepage": "https://github.com/Drakeoon/tinymce-contentful#readme",
   "devDependencies": {
     "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.12"
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
     "lodash": "^4.17.19",
