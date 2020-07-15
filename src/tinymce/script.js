@@ -9,7 +9,7 @@ function loadScript(src, onload) {
   document.body.appendChild(script);
 }
 
-export const loadTinyMCEScript = (api = {}, tinymceForContentful) => {
+export const loadTinyMCEScript = (api = {}, scriptLoadCallback) => {
   var sub =
     location.host == "contentful.staging.tiny.cloud"
       ? "cloud-staging"
@@ -25,8 +25,8 @@ export const loadTinyMCEScript = (api = {}, tinymceForContentful) => {
     apiKey;
 
   loadScript(tinymceUrl, function () {
-    if (tinymceForContentful) {
-      tinymceForContentful(api);
+    if (scriptLoadCallback) {
+      scriptLoadCallback(api);
     }
   });
 };

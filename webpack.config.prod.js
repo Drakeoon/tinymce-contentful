@@ -5,17 +5,15 @@ const dotenv = require("dotenv").config({
 });
 
 module.exports = {
-  watch: true,
-  devtool: "source-map",
-  mode: "development",
-  devServer: {
-    contentBase: path.join(__dirname, "dist"),
-    compress: true,
-    port: 3000,
-  },
+  mode: "production",
   plugins: [
     new webpack.DefinePlugin({
       "process.env": JSON.stringify(dotenv.parsed),
     }),
   ],
+
+  output: {
+    path: path.resolve(__dirname, "src"),
+    filename: "tinymce-for-contentful.js",
+  },
 };
