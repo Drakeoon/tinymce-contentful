@@ -1,16 +1,10 @@
 const path = require("path");
 const webpack = require("webpack");
-const dotenv = require("dotenv").config({
-  path: path.join(__dirname, ".env"),
-});
+const Dotenv = require("dotenv-webpack");
 
 module.exports = {
   mode: "production",
-  plugins: [
-    new webpack.DefinePlugin({
-      "process.env": JSON.stringify(dotenv.parsed),
-    }),
-  ],
+  plugins: [new Dotenv()],
 
   output: {
     path: path.resolve(__dirname, "src"),
