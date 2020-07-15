@@ -4,8 +4,7 @@
   "description": "This repository contains the integration of the TinyMCE rich text editor into the  Contentful headless CMS.",
   "scripts": {
     "start": "npx webpack-dev-server",
-    "build": "node ./.netlify/lambda.js && npx webpack --config webpack.config.prod.js",
-    "lambda": "netlify-lambda serve --config ./webpack.functions.js"
+    "build": "node ./.netlify/lambda.js && npx webpack --config webpack.config.prod.js"
   },
   "private": true,
   "repository": {
