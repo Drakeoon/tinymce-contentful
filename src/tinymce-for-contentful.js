@@ -1,273 +1,51 @@
+import initTinyMCE from "./tinymce";
+import { get } from "lodash";
+import {
+  defaultToolbar,
+  defaultMenubar,
+  defaultPlugins,
+} from "./tinymce/defaults";
+
+function tweak(param) {
+  var t = param.trim();
+  if (t === "false") {
+    return false;
+  } else if (t === "") {
+    return undefined;
+  } else {
+    return t;
+  }
+}
+
 window.contentfulExtension.init(function (api) {
+  const toolbar = tweak(
+    get(api, "parameters.instance.toolbar", defaultToolbar)
+  );
+  const menubar = tweak(
+    get(api, "parameters.instance.menubar", defaultMenubar)
+  );
+
+  const plugins = tweak(
+    get(api, "parameters.instance.menubar", defaultPlugins)
+  );
+
+  const accessToken = tweak(
+    get(api, "parameters.installation.contentfulManagementApiKey")
+  );
+
+  const space = tweak(get(api, "parameters.installation.spaceId"));
+
   function tinymceForContentful(api) {
-    tinymce.PluginManager.add("hubspot", function (editor, url) {
-      var openInsertScriptDialog = function () {
-        return editor.windowManager.open({
-          title: "Paste Hub Spot script",
-          body: {
-            type: "panel",
-            items: [
-              {
-                type: "textarea",
-                name: "script",
-                label: "Script",
-              },
-            ],
-          },
-          buttons: [
-            {
-              type: "cancel",
-              text: "Close",
-            },
-            {
-              type: "submit",
-              text: "Insert",
-              primary: true,
-            },
-          ],
-          onSubmit: function (api) {
-            var data = api.getData();
-            // Insert content when the window form is submitted
-            editor.insertContent(data.script);
-            api.close();
-          },
-        });
-      };
-
-      var openPasteSnippetDialog = function () {
-        return editor.windowManager.open({
-          title: "Paste your code snippet here",
-          body: {
-            type: "panel",
-            items: [
-              {
-                type: "textarea",
-                name: "code",
-                label: "Code",
-              },
-            ],
-          },
-          buttons: [
-            {
-              type: "cancel",
-              text: "Close",
-            },
-            {
-              type: "submit",
-              text: "Insert",
-              primary: true,
-            },
-          ],
-          onSubmit: function (api) {
-            var data = api.getData();
-            editor.insertContent(`<pre><code>${data.code}<code></pre>`);
-            api.close();
-          },
-        });
-      };
-
-      // Add a button that opens a window
-      editor.ui.registry.addMenuButton("hubspot", {
-        text: "Extra",
-        fetch: function (callback) {
-          var items = [
-            {
-              type: "menuitem",
-              text: "Insert script (Codepen, Hubspot)",
-              onAction: function () {
-                // Open window
-                openInsertScriptDialog();
-              },
-            },
-            {
-              type: "menuitem",
-              text: "Insert code",
-              onAction: function () {
-                openPasteSnippetDialog();
-              },
-            },
-          ];
-
-          callback(items);
-        },
-      });
-
-      return {
-        getMetadata: function () {
-          return {
-            name: "HubSpot",
-            url: "http://exampleplugindocsurl.com",
-          };
-        },
-      };
-    });
-
     api.window.startAutoResizer();
 
-    function tweak(param) {
-      var t = param.trim();
-      if (t === "false") {
-        return false;
-      } else if (t === "") {
-        return undefined;
-      } else {
-        return t;
-      }
-    }
+    const initOptions = {
+      toolbar,
+      menubar,
+      accessToken,
+      space,
+      plugins,
+    };
 
-    var tb = tweak(api.parameters.instance.toolbar);
-    var mb = tweak(api.parameters.instance.menubar);
-
-    tinymce.init({
-      selector: "#editor",
-      plugins: api.parameters.instance.plugins,
-      toolbar: tb,
-      menubar: mb,
-      max_height: 800,
-      min_height: 600,
-      autoresize_bottom_margin: 15,
-      resize: false,
-      image_caption: true,
-      extended_valid_elements: "script[src|async|defer|type|charset]",
-      file_picker_types: "image",
-      file_picker_callback: function (cb, value, meta) {
-        var input = document.createElement("input");
-        input.setAttribute("type", "file");
-        input.setAttribute("accept", "image/*");
-
-        input.onchange = function () {
-          var file = this.files[0];
-
-          const { name: fileName, type: contentType } = file;
-
-          var reader = new FileReader();
-          reader.onload = function () {
-            const waitMsg = "Please wait...";
-
-            const div = document.createElement("div");
-            div.innerHTML = waitMsg;
-            div.classList.add("tinymce-loading");
-
-            document.querySelector(".tox-dialog__body").appendChild(div);
-
-            const client = contentfulManagement.createClient({
-              accessToken: tweak(
-                api.parameters.installation.contentfulManagementApiKey
-              ),
-            });
-
-            client
-              .getSpace(tweak(api.parameters.installation.spaceId))
-              .then((space) =>
-                space.createAssetFromFiles({
-                  fields: {
-                    title: {
-                      "en-US": fileName,
-                    },
-                    description: {
-                      "en-US": fileName,
-                    },
-                    file: {
-                      "en-US": {
-                        contentType,
-                        fileName,
-                        file,
-                      },
-                    },
-                  },
-                })
-              )
-              .then((asset) => asset.processForAllLocales())
-              .then((asset) => {
-                const { url } = asset.fields.file["en-US"];
-                const title = asset.fields.title["en-US"];
-
-                asset.publish().then(() => cb(url, { title }));
-
-                div.remove();
-              });
-          };
-
-          reader.readAsDataURL(file);
-        };
-
-        input.click();
-      },
-      init_instance_callback: function (editor) {
-        var listening = true;
-
-        function getEditorContent() {
-          return editor.getContent() || "";
-        }
-
-        function getApiContent() {
-          return api.field.getValue() || "";
-        }
-
-        function setContent(x) {
-          var apiContent = x || "";
-          var editorContent = getEditorContent();
-          if (apiContent !== editorContent) {
-            //console.log('Setting editor content to: [' + apiContent + ']');
-            editor.setContent(apiContent);
-          }
-        }
-
-        setContent(api.field.getValue());
-
-        api.field.onValueChanged(function (x) {
-          if (listening) {
-            setContent(x);
-          }
-        });
-
-        function onEditorChange() {
-          var editorContent = getEditorContent();
-          var apiContent = getApiContent();
-
-          if (editorContent !== apiContent) {
-            //console.log('Setting content in api to: [' + editorContent + ']');
-            listening = false;
-            api.field
-              .setValue(editorContent)
-              .then(function () {
-                listening = true;
-              })
-              .catch(function (err) {
-                console.log("Error setting content", err);
-                listening = true;
-              });
-          }
-        }
-
-        var throttled = _.throttle(onEditorChange, 500, { leading: true });
-        editor.on("change keyup setcontent blur", throttled);
-      },
-    });
+    initTinyMCE(api, initOptions);
   }
-
-  function loadScript(src, onload) {
-    var script = document.createElement("script");
-    script.setAttribute("src", src);
-    script.onload = onload;
-    document.body.appendChild(script);
-  }
-
-  var sub =
-    location.host == "contentful.staging.tiny.cloud"
-      ? "cloud-staging"
-      : "cloud";
-  var apiKey = api.parameters.installation.apiKey;
-  var channel = api.parameters.installation.channel;
-  var tinymceUrl =
-    "https://" +
-    sub +
-    ".tinymce.com/" +
-    channel +
-    "/tinymce.min.js?apiKey=" +
-    apiKey;
-
-  loadScript(tinymceUrl, function () {
-    tinymceForContentful(api);
-  });
 });
