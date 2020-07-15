@@ -1,0 +1,1 @@
+export { initHubspotPlugin } from "./hubspot";
