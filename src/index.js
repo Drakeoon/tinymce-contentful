@@ -17,7 +17,15 @@ document.addEventListener("DOMContentLoaded", function () {
       plugins: defaultPlugins,
     };
 
-    loadTinyMCEScript(null, () => initTinyMCE(null, initOptions));
+    const api = {
+      field: {
+        getValue: () => false,
+        onValueChanged: () => false,
+        setValue: () => Promise.resolve(),
+      },
+    };
+
+    loadTinyMCEScript(api, (api) => initTinyMCE(api, initOptions));
 
     return;
   }

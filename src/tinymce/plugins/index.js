@@ -1,1 +1,1 @@
-export { initHubspotPlugin } from "./hubspot";
+export { initExtraPlugin } from "./extra";

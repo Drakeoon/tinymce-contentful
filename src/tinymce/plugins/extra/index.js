@@ -1,15 +1,23 @@
-export const initHubspotPlugin = () => {
-  tinymce.PluginManager.add("hubspot", function (editor, url) {
+export const initExtraPlugin = () => {
+  tinymce.PluginManager.add("extra", function (editor, url) {
     var openInsertScriptDialog = function () {
       return editor.windowManager.open({
-        title: "Paste Hub Spot script",
+        title: "Paste in the Hub Spot script",
         body: {
           type: "panel",
           items: [
             {
+              type: "alertbanner",
+              level: "warn",
+              text:
+                "<strong>Be careful!</strong> Scripts inserted here <strong>will be executed</strong> on the blog post page. You need to be <strong>fully sure</strong> about the script origin.",
+              icon: "warning",
+            },
+            {
               type: "textarea",
-              name: "script",
+              name: "hubspot-script",
               label: "Script",
+              maximized: true,
             },
           ],
         },
@@ -27,7 +35,7 @@ export const initHubspotPlugin = () => {
         onSubmit: function (api) {
           var data = api.getData();
           // Insert content when the window form is submitted
-          editor.insertContent(data.script);
+          editor.insertContent(data["hubspot-script"]);
           api.close();
         },
       });
@@ -66,7 +74,7 @@ export const initHubspotPlugin = () => {
     };
 
     // Add a button that opens a window
-    editor.ui.registry.addMenuButton("hubspot", {
+    editor.ui.registry.addMenuButton("extra", {
       text: "Extra",
       fetch: function (callback) {
         var items = [

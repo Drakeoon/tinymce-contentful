@@ -1,11 +1,11 @@
-import { initHubspotPlugin } from "./plugins";
+import { initExtraPlugin } from "./plugins";
 import { file_picker_callback, init_instance_callback } from "./callbacks";
 
 const initTinyMCE = (api, initOptions) => {
   const { toolbar, menubar, plugins, accessToken, space } = initOptions;
 
   // initialise plugins
-  initHubspotPlugin();
+  initExtraPlugin(api);
 
   // initialise TinyMCE main instance
   tinymce.init({
