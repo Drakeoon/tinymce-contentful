@@ -1,0 +1,9 @@
+pre > code {
+  display: block;
+  width: 92%;
+  background-color: #dedede;
+  border-radius: 0.75rem;
+  padding: 1rem 1.5rem;
+  color: #585953;
+  margin-right: 1rem;
+}

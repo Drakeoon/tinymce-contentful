@@ -8,6 +8,11 @@ const initTinyMCE = (api, initOptions) => {
   initExtraPlugin(api);
 
   // initialise TinyMCE main instance
+  const contentCss =
+    process.env.NODE_ENV === "development"
+      ? "/custom_content_css.css"
+      : "/dist/custom_content_css.css";
+
   tinymce.init({
     selector: "#editor",
     plugins: plugins,
@@ -22,6 +27,7 @@ const initTinyMCE = (api, initOptions) => {
     file_picker_types: "image",
     file_picker_callback: file_picker_callback(space, accessToken),
     init_instance_callback: init_instance_callback(api),
+    content_css: `${contentCss}?${new Date().getTime()}`,
   });
 };
 

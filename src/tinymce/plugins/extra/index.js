@@ -15,7 +15,7 @@ export const initExtraPlugin = () => {
             },
             {
               type: "textarea",
-              name: "hubspot-script",
+              name: "pasted-script",
               label: "Script",
               maximized: true,
             },
@@ -35,7 +35,7 @@ export const initExtraPlugin = () => {
         onSubmit: function (api) {
           var data = api.getData();
           // Insert content when the window form is submitted
-          editor.insertContent(data["hubspot-script"]);
+          editor.insertContent(data["pasted-script"]);
           api.close();
         },
       });
@@ -47,6 +47,20 @@ export const initExtraPlugin = () => {
         body: {
           type: "panel",
           items: [
+            {
+              type: "alertbanner",
+              level: "info",
+              text:
+                "The code in the editor will look differently than on live website. Use <strong>Preview</strong> button in Contentful to ensure it displays correctly.",
+              icon: "info",
+            },
+            {
+              type: "alertbanner",
+              level: "info",
+              text:
+                "<strong>You don't need to fix indentation</strong>, blog will do that for you :-). Use Preview to ensure it displays correctly.",
+              icon: "info",
+            },
             {
               type: "textarea",
               name: "code",
@@ -67,7 +81,9 @@ export const initExtraPlugin = () => {
         ],
         onSubmit: function (api) {
           var data = api.getData();
-          editor.insertContent(`<pre><code>${data.code}<code></pre>`);
+
+          editor.insertContent(`<pre><code>${data.code}</code></pre>`);
+          editor.insertContent("<p></p>");
           api.close();
         },
       });
