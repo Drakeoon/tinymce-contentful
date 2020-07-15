@@ -19,6 +19,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     initTinyMCE(null, initOptions);
 
+    loadTinyMCEScript();
+
     return;
   }
 
