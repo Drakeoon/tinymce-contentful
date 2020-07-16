@@ -23,6 +23,7 @@ const initTinyMCE = (api, initOptions) => {
     autoresize_bottom_margin: 15,
     resize: false,
     image_caption: true,
+    entity_encoding: "named",
     extended_valid_elements: "script[src|async|defer|type|charset]",
     file_picker_types: "image",
     file_picker_callback: file_picker_callback(space, accessToken),
