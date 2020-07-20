@@ -2,7 +2,7 @@ import { throttle } from "lodash";
 
 export const init_instance_callback = (api) =>
   function (editor) {
-    var listening = true;
+    let listening = true;
 
     function getEditorContent() {
       return editor.getContent() || "";
@@ -13,8 +13,8 @@ export const init_instance_callback = (api) =>
     }
 
     function setContent(x) {
-      var apiContent = x || "";
-      var editorContent = getEditorContent();
+      const apiContent = x || "";
+      const editorContent = getEditorContent();
       if (apiContent !== editorContent) {
         //console.log('Setting editor content to: [' + apiContent + ']');
         editor.setContent(apiContent);
@@ -30,8 +30,8 @@ export const init_instance_callback = (api) =>
     });
 
     function onEditorChange() {
-      var editorContent = getEditorContent();
-      var apiContent = getApiContent();
+      const editorContent = getEditorContent();
+      const apiContent = getApiContent();
 
       if (editorContent !== apiContent) {
         //console.log('Setting content in api to: [' + editorContent + ']');
@@ -48,6 +48,6 @@ export const init_instance_callback = (api) =>
       }
     }
 
-    var throttled = throttle(onEditorChange, 500, { leading: true });
+    const throttled = throttle(onEditorChange, 500, { leading: true });
     editor.on("change keyup setcontent blur", throttled);
   };

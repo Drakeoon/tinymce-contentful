@@ -2,16 +2,16 @@ import { throttle, get } from "lodash";
 
 export const file_picker_callback = (space, accessToken) =>
   function (cb, value, meta) {
-    var input = document.createElement("input");
+    const input = document.createElement("input");
     input.setAttribute("type", "file");
     input.setAttribute("accept", "image/*");
 
     input.onchange = function () {
-      var file = this.files[0];
+      const file = this.files[0];
 
       const { name: fileName, type: contentType } = file;
 
-      var reader = new FileReader();
+      const reader = new FileReader();
       reader.onload = function () {
         const waitMsg = "Please wait...";
 

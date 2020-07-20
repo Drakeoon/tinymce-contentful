@@ -3,20 +3,20 @@ import { get } from "lodash";
 const { TINYMCE_KEY, TINYMCE_CHANNEL } = process.env;
 
 function loadScript(src, onload) {
-  var script = document.createElement("script");
+  const script = document.createElement("script");
   script.setAttribute("src", src);
   script.onload = onload;
   document.body.appendChild(script);
 }
 
 export const loadTinyMCEScript = (api = {}, scriptLoadCallback) => {
-  var sub =
+  const sub =
     location.host == "contentful.staging.tiny.cloud"
       ? "cloud-staging"
       : "cloud";
-  var apiKey = get(api, "parameters.installation.apiKey", TINYMCE_KEY);
-  var channel = get(api, "parameters.installation.channel", TINYMCE_CHANNEL);
-  var tinymceUrl =
+  const apiKey = get(api, "parameters.installation.apiKey", TINYMCE_KEY);
+  const channel = get(api, "parameters.installation.channel", TINYMCE_CHANNEL);
+  const tinymceUrl =
     "https://" +
     sub +
     ".tinymce.com/" +

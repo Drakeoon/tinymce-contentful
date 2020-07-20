@@ -37,7 +37,7 @@ const openInsertCodeSnippetDialog = function (editor) {
       },
     ],
     onSubmit: function (api) {
-      var data = api.getData();
+      const data = api.getData();
 
       const escapedCode = tinymce.html.Entities.encodeRaw(data.code);
 

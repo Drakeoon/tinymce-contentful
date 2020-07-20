@@ -7,7 +7,7 @@ export const initExtraPlugin = () => {
     editor.ui.registry.addMenuButton("extra", {
       text: "Insert Extra",
       fetch: function (callback) {
-        var items = [
+        const items = [
           {
             type: "menuitem",
             text: "Insert HubSpot script",

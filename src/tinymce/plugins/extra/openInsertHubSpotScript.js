@@ -31,7 +31,7 @@ const openInsertHubSpotScript = function (editor) {
       },
     ],
     onSubmit: function (api) {
-      var data = api.getData();
+      const data = api.getData();
 
       editor.insertContent(data["pasted-script"]);
 
