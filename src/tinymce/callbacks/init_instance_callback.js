@@ -16,7 +16,6 @@ export const init_instance_callback = (api) =>
       const apiContent = x || "";
       const editorContent = getEditorContent();
       if (apiContent !== editorContent) {
-        //console.log('Setting editor content to: [' + apiContent + ']');
         editor.setContent(apiContent);
       }
     }
@@ -34,7 +33,6 @@ export const init_instance_callback = (api) =>
       const apiContent = getApiContent();
 
       if (editorContent !== apiContent) {
-        //console.log('Setting content in api to: [' + editorContent + ']');
         listening = false;
         api.field
           .setValue(editorContent)
